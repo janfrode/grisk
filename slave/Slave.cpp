@@ -11,7 +11,8 @@
 
 #include <stdlib.h>
 #include <string>
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <jni.h>
 #include "jistributed_JistributedClient.h"
 

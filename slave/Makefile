@@ -13,17 +13,17 @@
 #FCOMPILER   = /usr/local/gcc-2.95.1-sparc-sun-solaris2.6/bin/g77
 #CC          = CC
 #FCOMPILER   = f77
-CC          = g++
-FCOMPILER   = g77
+CC          = g++  -shared
+FCOMPILER   = gfortran 
 #FLINKER     = $(FCOMPILER)
 LIB_PATH    = 
 #LIB_LIST    = -lftn
-LIB_LIST	= -lg2c	# For gcc
+LIB_LIST	= #-lg2c	# For gcc
 #
-JINCLUDE_DIR = -I/usr/java/include -I/usr/java/include/solaris
+JINCLUDE_DIR = -I/etc/alternatives/java_sdk/include/ -I/etc/alternatives/java_sdk/include/linux
 #FFLAGS  = -O3 -i8 -mips4 -64
 #FFLAGS  = -O3 -static -C #-mips4
-FFLAGS  = -G -fno-second-underscore -O3 
+FFLAGS  = -fno-second-underscore -O3 -std=legacy -Wline-truncation -ffixed-line-length-132 -fPIC
 
 ### End User configurable options ###
 
@@ -47,7 +47,7 @@ FFS =   slave_main_routine.o slave.o fast_hnf.o fast_find.o \
 all:	libSlaveCalc.so
 
 libSlaveCalc.so:	$(FFS) Slave.cpp
-	$(CC) -O -G -fPIC -o libSlaveCalc.so $(JINCLUDE_DIR) $(FFS) Slave.cpp $(LIBS)
+	$(CC) -O -fPIC -o libSlaveCalc.so $(JINCLUDE_DIR) $(FFS) Slave.cpp $(LIBS) -lgfortran
 
 .f.o:
 	$(FCOMPILER) -c $(FFLAGS) $*.f
