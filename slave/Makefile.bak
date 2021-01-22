@@ -1,0 +1,46 @@
+#
+# Machine Specific Compile/Link Parameters
+#
+
+# Sjekk ~kjellp/src/makefile for dependencies
+MKDEP		= /usr/bin/X11/makedepend
+
+CC          = CC
+FCOMPILER   = f77
+#FLINKER     = $(FCOMPILER)
+LIB_PATH    = 
+LIB_LIST    = -lftn
+#LIB_LIST	= -lg2c	# For gcc
+#
+JINCLUDE_DIR = -I/usr/java/include -I/usr/java/include/irix
+#FFLAGS  = -O3 -i8 -mips4 -64
+FFLAGS  = -static -O3 
+
+### End User configurable options ###
+
+CCLAGS = $(INCLUDE_DIR) $(OPTFLAGS)
+LIBS = $(LIB_PATH) $(LIB_LIST)
+
+FFS =   slave_main_routine.o slave.o fast_hnf.o fast_find.o \
+        kjlist.o minors.o entire_hnf.o
+
+
+#
+# Dependencies on include files
+#
+
+#master:        $(FFM)
+#	$(FLINKER) -o master $(FFLAGS) $(FFM) $(LIBS)
+
+#slave:		$(FFS)
+#	$(FLINKER) -o slave $(FFLAGS) $(FFS) $(LIBS)
+
+libSlaveCalc.so:	$(FFS) Slave.cpp
+	$(CC) -O -shared -o libSlaveCalc.so -lC $(JINCLUDE_DIR) $(FFS) Slave.cpp $(LIBS)
+
+.f.o:
+	$(FCOMPILER) -c $(FFLAGS) $*.f
+
+clean:
+	rm -f $(FFS) libSlaveCalc.so
+# DO NOT DELETE

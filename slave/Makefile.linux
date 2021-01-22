@@ -1,0 +1,41 @@
+#
+# Machine Specific Compile/Link Parameters
+#
+# linux/g++ %  g++ -O -shared -fPIC -o libSlaveCalc.so
+# -I/usr/local/jdk1.2/include -I/usr/local/jdk1.2/include/linux 
+# slave_main_routine.o slave.o fast_hnf.o fast_find.o kjlist.o 
+# minors.o entire_hnf.o Slave.cpp  -lg2c 
+
+CC          = g++
+FCOMPILER   = g77
+LIB_PATH    = 
+LIB_LIST	= -lg2c	# For gcc
+#
+JINCLUDE_DIR = -I/usr/java/include -I/usr/java/include/linux
+FFLAGS  = -static -fno-second-underscore -O3
+
+### End User configurable options ###
+
+CCLAGS = $(INCLUDE_DIR) $(OPTFLAGS)
+LIBS = $(LIB_PATH) $(LIB_LIST)
+
+FFS =   slave_main_routine.o slave.o fast_hnf.o fast_find.o \
+        kjlist.o minors.o entire_hnf.o
+
+
+#
+# Dependencies on include files
+#
+
+all:	libSlaveCalc.so
+
+libSlaveCalc.so:	$(FFS) Slave.cpp
+	$(CC) -O -shared -fPIC -o libSlaveCalc.so $(JINCLUDE_DIR) $(FFS) Slave.cpp $(LIBS)
+
+.f.o:
+	$(FCOMPILER) -c $(FFLAGS) $*.f
+
+clean:
+	rm -f $(FFS) libSlaveCalc.so
+
+# DO NOT DELETE
